@@ -1,0 +1,37 @@
+name: Flutter CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the repository code
+      - uses: actions/checkout@v4
+
+      # Set up Flutter with a version that supports Dart 3.6.0 or higher
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.1' # Use a Flutter version compatible with Dart 3.6.0
+
+      # Install dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Verify code formatting
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed .
+
+      # Analyze the project's source code
+      - name: Analyze project source
+        run: flutter analyze
+
+      # Run tests
+      - name: Run tests
+        run: flutter test
